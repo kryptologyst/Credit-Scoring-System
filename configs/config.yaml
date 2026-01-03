@@ -1,0 +1,82 @@
+# Configuration for Credit Scoring System
+defaults:
+  - _self_
+  - override /data: synthetic
+  - override /model: xgboost
+  - override /evaluation: comprehensive
+
+# Data configuration
+data:
+  synthetic:
+    n_samples: 10000
+    n_features: 8
+    random_seed: 42
+    test_size: 0.2
+    validation_size: 0.1
+    
+  real:
+    path: "data/raw/credit_data.csv"
+    target_column: "credit_approved"
+    categorical_columns: ["employment_status", "education_level", "marital_status"]
+    numerical_columns: ["credit_score", "annual_income", "loan_amount", "debt_to_income_ratio", "age", "years_employed"]
+
+# Model configuration
+model:
+  decision_tree:
+    max_depth: 10
+    min_samples_split: 20
+    min_samples_leaf: 10
+    random_state: 42
+    
+  random_forest:
+    n_estimators: 100
+    max_depth: 10
+    min_samples_split: 20
+    min_samples_leaf: 10
+    random_state: 42
+    
+  xgboost:
+    n_estimators: 100
+    max_depth: 6
+    learning_rate: 0.1
+    subsample: 0.8
+    colsample_bytree: 0.8
+    random_state: 42
+    
+  lightgbm:
+    n_estimators: 100
+    max_depth: 6
+    learning_rate: 0.1
+    subsample: 0.8
+    colsample_bytree: 0.8
+    random_state: 42
+
+# Evaluation configuration
+evaluation:
+  comprehensive:
+    metrics: ["accuracy", "precision", "recall", "f1", "auc", "gini", "ks_statistic"]
+    cross_validation:
+      cv_folds: 5
+      stratify: true
+      random_state: 42
+    feature_importance: true
+    shap_analysis: true
+    
+  basic:
+    metrics: ["accuracy", "precision", "recall", "f1"]
+    cross_validation:
+      cv_folds: 3
+      stratify: true
+      random_state: 42
+
+# Paths
+paths:
+  data_dir: "data"
+  models_dir: "models"
+  assets_dir: "assets"
+  logs_dir: "logs"
+  
+# Logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
